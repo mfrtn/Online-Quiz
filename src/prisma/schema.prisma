@@ -1,0 +1,94 @@
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://user:password@localhost:5432/mydatabase"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id          Int        @id @default(autoincrement())
+    name        String
+    email       String     @unique
+    password    String
+    role        Role
+    userQuizzes UserQuiz[]
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+}
+
+model QuizCategory {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String?
+    quizzes     Quiz[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Quiz {
+    id            Int            @id @default(autoincrement())
+    categoryId    Int
+    category      QuizCategory   @relation(fields: [categoryId], references: [id])
+    title         String
+    description   String?
+    time          DateTime?
+    userQuizzes   UserQuiz[]
+    quizQuestions QuizQuestion[]
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+}
+
+model Question {
+    id            Int            @id @default(autoincrement())
+    title         String
+    answer_1      String
+    answer_2      String
+    answer_3      String
+    answer_4      String
+    correctAnswer String
+    userAnswers   UserAnswer[]
+    quizQuestions QuizQuestion[]
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+}
+
+model QuizQuestion {
+    id         Int      @id @default(autoincrement())
+    quizId     Int
+    quiz       Quiz     @relation(fields: [quizId], references: [id])
+    questionId Int
+    question   Question @relation(fields: [questionId], references: [id])
+}
+
+model UserQuiz {
+    id          Int          @id @default(autoincrement())
+    userId      Int
+    user        User         @relation(fields: [userId], references: [id])
+    quizId      Int
+    quiz        Quiz         @relation(fields: [quizId], references: [id])
+    score       Int?
+    startTime   DateTime?
+    endTime     DateTime?
+    userAnswers UserAnswer[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+}
+
+model UserAnswer {
+    id           Int      @id @default(autoincrement())
+    userQuizId   Int
+    userQuiz     UserQuiz @relation(fields: [userQuizId], references: [id])
+    questionId   Int
+    question     Question @relation(fields: [questionId], references: [id])
+    answerChosen String
+    isCorrect    Boolean
+}
+
+enum Role {
+    CLIENT
+    ADMIN
+    OPERATOR
+    DEACTIVATED
+}
