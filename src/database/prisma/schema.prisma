@@ -1,6 +1,6 @@
 datasource db {
     provider = "postgresql"
-    url      = "postgresql://user:password@localhost:5432/mydatabase"
+    url      = env("DB_URL")
 }
 
 generator client {
@@ -12,52 +12,61 @@ model User {
     name        String
     email       String     @unique
     password    String
-    role        Role
-    userQuizzes UserQuiz[]
+    role        Role       @default(CLIENT)
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
+    userQuizzes UserQuiz[]
 }
 
-model QuizCategory {
-    id          Int      @id @default(autoincrement())
+model Category {
+    id          Int                @id @default(autoincrement())
     title       String
     description String?
-    quizzes     Quiz[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    createdAt   DateTime           @default(now())
+    updatedAt   DateTime           @updatedAt
+    questions   QuestionCategory[]
+}
+
+model Question {
+    id            Int                @id @default(autoincrement())
+    title         String
+    answer1       String
+    answer2       String
+    answer3       String
+    answer4       String
+    correctAnswer Int
+    difficulty    Difficulty
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+    userAnswers   UserAnswer[]
+    quizQuestions QuizQuestion[]
+    categories    QuestionCategory[]
 }
 
 model Quiz {
     id            Int            @id @default(autoincrement())
-    categoryId    Int
-    category      QuizCategory   @relation(fields: [categoryId], references: [id])
     title         String
     description   String?
     time          DateTime?
+    difficulty    Difficulty
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
     userQuizzes   UserQuiz[]
     quizQuestions QuizQuestion[]
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-}
-
-model Question {
-    id            Int            @id @default(autoincrement())
-    title         String
-    answer_1      String
-    answer_2      String
-    answer_3      String
-    answer_4      String
-    correctAnswer String
-    userAnswers   UserAnswer[]
-    quizQuestions QuizQuestion[]
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
 }
 
 model QuizQuestion {
     id         Int      @id @default(autoincrement())
     quizId     Int
     quiz       Quiz     @relation(fields: [quizId], references: [id])
+    questionId Int
+    question   Question @relation(fields: [questionId], references: [id])
+}
+
+model QuestionCategory {
+    id         Int      @id @default(autoincrement())
+    categoryId Int
+    category   Category @relation(fields: [categoryId], references: [id])
     questionId Int
     question   Question @relation(fields: [questionId], references: [id])
 }
@@ -82,7 +91,7 @@ model UserAnswer {
     userQuiz     UserQuiz @relation(fields: [userQuizId], references: [id])
     questionId   Int
     question     Question @relation(fields: [questionId], references: [id])
-    answerChosen String
+    answerChosen Int
     isCorrect    Boolean
 }
 
@@ -91,4 +100,10 @@ enum Role {
     ADMIN
     OPERATOR
     DEACTIVATED
+}
+
+enum Difficulty {
+    EASY
+    MEDIUM
+    DIFFICULT
 }
