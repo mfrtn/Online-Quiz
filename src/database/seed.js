@@ -14,12 +14,11 @@ for (const key in Difficulty) {
 }
 
 function createRandomUser() {
-  const random = Math.floor(Math.random() * roles.length);
   return {
     name: faker.name.fullName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
-    role: roles[random],
+    role: faker.helpers.arrayElement(roles),
   };
 }
 
@@ -31,7 +30,6 @@ function createRandomCategory() {
 }
 
 function createRandomQuestion() {
-  const random = Math.floor(Math.random() * difficulties.length);
   return {
     title: faker.lorem.sentence(),
     answer1: faker.lorem.word(),
@@ -39,17 +37,15 @@ function createRandomQuestion() {
     answer3: faker.lorem.word(),
     answer4: faker.lorem.word(),
     correctAnswer: faker.datatype.number({ min: 1, max: 4 }),
-    difficulty: difficulties[random],
+    difficulty: faker.helpers.arrayElement(difficulties),
   };
 }
 
 function createRandomQuiz() {
-  const random = Math.floor(Math.random() * difficulties.length);
-
   return {
     title: faker.lorem.word(),
     description: faker.lorem.paragraph(),
-    difficulty: difficulties[random],
+    difficulty: faker.helpers.arrayElement(difficulties),
   };
 }
 

@@ -103,6 +103,15 @@ CREATE TABLE "UserAnswer" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "QuizQuestion_quizId_questionId_key" ON "QuizQuestion"("quizId", "questionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "QuestionCategory_categoryId_questionId_key" ON "QuestionCategory"("categoryId", "questionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserQuiz_userId_quizId_key" ON "UserQuiz"("userId", "quizId");
+
 -- AddForeignKey
 ALTER TABLE "QuizQuestion" ADD CONSTRAINT "QuizQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

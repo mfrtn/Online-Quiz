@@ -1,9 +1,21 @@
-require("dotenv").config();
+const { db } = require("./src/database");
+const { ExpressLoader } = require("./src/loader");
 
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3001;
+async function connectionCheck() {
+  await db.$connect();
+}
 
-app.listen(PORT, () => {
-  console.log(`OnlineQuiz app server is running on port ${PORT}`);
-});
+(function main() {
+  connectionCheck()
+    .then(async () => {
+      console.log("Database is connected");
+      const app = new ExpressLoader();
+      app.run();
+    })
+    .catch(async (e) => {
+      console.error(e);
+      await db.$disconnect();
+      //   setTimeout(() => main(), 5000);
+      //   process.exit(1);
+    });
+})();

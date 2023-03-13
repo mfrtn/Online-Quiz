@@ -61,6 +61,8 @@ model QuizQuestion {
     quiz       Quiz     @relation(fields: [quizId], references: [id])
     questionId Int
     question   Question @relation(fields: [questionId], references: [id])
+
+    @@unique([quizId, questionId])
 }
 
 model QuestionCategory {
@@ -69,6 +71,8 @@ model QuestionCategory {
     category   Category @relation(fields: [categoryId], references: [id])
     questionId Int
     question   Question @relation(fields: [questionId], references: [id])
+
+    @@unique([categoryId, questionId])
 }
 
 model UserQuiz {
@@ -83,6 +87,8 @@ model UserQuiz {
     userAnswers UserAnswer[]
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
+
+    @@unique([userId, quizId])
 }
 
 model UserAnswer {
