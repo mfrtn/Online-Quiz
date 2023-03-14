@@ -1,5 +1,5 @@
 const { db } = require("./src/database");
-const { ExpressLoader } = require("./src/loader");
+const { ExpressLoader } = require("./src/loaders");
 
 async function connectionCheck() {
   await db.$connect();
