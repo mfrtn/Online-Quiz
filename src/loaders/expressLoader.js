@@ -1,6 +1,8 @@
-const express = require("express");
 const config = require("../config");
 const router = require("../routes");
+const { errorHandler } = require("../middlewares").error;
+
+const express = require("express");
 
 class ExpressLoader {
   constructor() {
@@ -8,6 +10,18 @@ class ExpressLoader {
     this.app.use(express.json());
 
     router(this.app);
+
+    this.app.use(errorHandler);
+
+    this.app.use((req, res) => {
+      res.status(404).json({
+        error: {
+          status: true,
+          code: 404,
+          message: "The page you are looking for deos not exist",
+        },
+      });
+    });
   }
   run() {
     this.app.listen(config.PORT, () => {

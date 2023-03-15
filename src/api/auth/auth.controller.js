@@ -3,7 +3,6 @@ const { userService } = require("../user");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const authController = {
   register: async (req, res) => {
