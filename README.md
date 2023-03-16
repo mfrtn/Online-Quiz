@@ -1,8 +1,10 @@
 ## Online Quiz Project
 
-### TODO
+#### TODO
 
-- [ ] ErrorHandler not working
+- [x] ErrorHandler not working
 - [ ] ErrorHandler updating
-- [ ] Category Api
-- [ ] Quiz APi
+- [x] Category API
+- [ ] Improve Category AAPI
+- [x] Quiz API
+- [ ] Imporove Quiz API

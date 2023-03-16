@@ -9,8 +9,8 @@ async function connectionCheck() {
   connectionCheck()
     .then(async () => {
       console.log("Database is connected");
-      const app = new ExpressLoader();
-      app.run();
+      const apiApp = new ExpressLoader();
+      apiApp.apiRun();
     })
     .catch(async (e) => {
       console.error(e);

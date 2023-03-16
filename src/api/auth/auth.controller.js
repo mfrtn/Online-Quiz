@@ -32,6 +32,7 @@ const authController = {
       });
     }
   },
+
   login: async (req, res) => {
     const validCredential = req.body;
 
@@ -60,6 +61,7 @@ const authController = {
       });
     }
   },
+
   logout: async (req, res) => {},
 };
 

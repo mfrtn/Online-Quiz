@@ -1,30 +1,33 @@
 const config = require("../config");
-const router = require("../routes");
+const apiRouter = require("../routes");
 const { errorHandler } = require("../middlewares").error;
 
 const express = require("express");
+const router = express.Router();
 
 class ExpressLoader {
   constructor() {
-    this.app = express();
-    this.app.use(express.json());
+    this.apiApp = express();
+    this.apiApp.use(express.json());
 
-    router(this.app);
+    this.apiApp.use("/api", router);
 
-    this.app.use(errorHandler);
+    apiRouter(router);
 
-    this.app.use((req, res) => {
+    this.apiApp.use(errorHandler);
+
+    this.apiApp.use((req, res) => {
       res.status(404).json({
         error: {
           status: true,
           code: 404,
-          message: "The page you are looking for deos not exist",
+          message: "This API path deos not exist",
         },
       });
     });
   }
-  run() {
-    this.app.listen(config.PORT, () => {
+  apiRun() {
+    this.apiApp.listen(config.PORT, () => {
       console.log(`OnlineQuiz app server is running on port ${config.PORT}`);
     });
   }

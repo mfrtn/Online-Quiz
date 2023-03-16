@@ -15,6 +15,7 @@ const userService = {
     });
     return users;
   },
+
   findById: async (id) => {
     const user = await db.user.findUnique({
       where: {
@@ -27,6 +28,7 @@ const userService = {
       return user;
     }
   },
+
   findByEmail: async (email) => {
     return await db.user.findUnique({
       where: {

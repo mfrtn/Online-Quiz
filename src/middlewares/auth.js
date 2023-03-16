@@ -44,6 +44,21 @@ const admin = (req, res, next) => {
   }
 };
 
+const operator = (req, res, next) => {
+  if (!req.user) {
+    throw new Error("We need use auth middleware first");
+  }
+
+  if (req.user.role === Role.ADMIN || req.user.role === Role.OPERATOR) {
+    next();
+  } else {
+    const error = new Error();
+    error.message = "You are not authorized";
+    error.status = 401;
+    next(error);
+  }
+};
+
 const self = (req, res, next) => {
   if (!req.user) {
     throw new Error("We need use authenticate user first");
@@ -66,5 +81,6 @@ const self = (req, res, next) => {
 module.exports = {
   authJWT,
   admin,
+  operator,
   self,
 };

@@ -1,7 +1,7 @@
 const userService = require("./user.service");
 
 const userController = {
-  index: async (req, res) => {
+  index: async (req, res, next) => {
     try {
       id = req.params.id;
       if (id === undefined) {
@@ -15,11 +15,8 @@ const userController = {
       }
       return res.sendStatus(404);
     } catch (error) {
-      throw error;
-      // return res.status(500).json({
-      //   error: true,
-      //   message: error.message,
-      // });
+      error.status = 500;
+      next(error);
     }
   },
 };
