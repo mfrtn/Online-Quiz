@@ -8,14 +8,14 @@ generator client {
 }
 
 model User {
-    id          Int        @id @default(autoincrement())
-    name        String
-    email       String     @unique
-    password    String
-    role        Role       @default(CLIENT)
-    createdAt   DateTime   @default(now())
-    updatedAt   DateTime   @updatedAt
-    userQuizzes UserQuiz[]
+    id        Int        @id @default(autoincrement())
+    name      String
+    email     String     @unique
+    password  String
+    role      Role       @default(CLIENT)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    quizzes   UserQuiz[]
 }
 
 model Category {
@@ -25,6 +25,7 @@ model Category {
     createdAt   DateTime           @default(now())
     updatedAt   DateTime           @updatedAt
     questions   QuestionCategory[]
+    quizzez     Quiz[]
 }
 
 model Question {
@@ -38,21 +39,23 @@ model Question {
     difficulty    Difficulty
     createdAt     DateTime           @default(now())
     updatedAt     DateTime           @updatedAt
-    userAnswers   UserAnswer[]
-    quizQuestions QuizQuestion[]
+    users         UserAnswer[]
+    quizzes       QuizQuestion[]
     categories    QuestionCategory[]
 }
 
 model Quiz {
-    id            Int            @id @default(autoincrement())
-    title         String
-    description   String?
-    time          DateTime?
-    difficulty    Difficulty
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    userQuizzes   UserQuiz[]
-    quizQuestions QuizQuestion[]
+    id          Int            @id @default(autoincrement())
+    title       String
+    description String?
+    categoryId  Int?
+    time        DateTime?
+    difficulty  Difficulty
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+    users       UserQuiz[]
+    questions   QuizQuestion[]
+    Category    Category?      @relation(fields: [categoryId], references: [id])
 }
 
 model QuizQuestion {
@@ -76,17 +79,17 @@ model QuestionCategory {
 }
 
 model UserQuiz {
-    id          Int          @id @default(autoincrement())
-    userId      Int
-    user        User         @relation(fields: [userId], references: [id])
-    quizId      Int
-    quiz        Quiz         @relation(fields: [quizId], references: [id])
-    score       Int?
-    startTime   DateTime?
-    endTime     DateTime?
-    userAnswers UserAnswer[]
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
+    id        Int          @id @default(autoincrement())
+    userId    Int
+    user      User         @relation(fields: [userId], references: [id])
+    quizId    Int
+    quiz      Quiz         @relation(fields: [quizId], references: [id])
+    score     Int?
+    startTime DateTime?
+    endTime   DateTime?
+    asnwers   UserAnswer[]
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
 
     @@unique([userId, quizId])
 }

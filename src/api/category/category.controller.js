@@ -73,7 +73,9 @@ const categoryController = {
   },
 
   getAllQuestions: async (req, res) => {
-    difficulty = req.query.difficulty.toUpperCase();
+    difficulty = req.query.difficulty
+      ? req.query.difficulty.toUpperCase()
+      : null;
     id = req.params.id;
     try {
       if (id !== undefined && !isNaN(id)) {
@@ -83,6 +85,44 @@ const categoryController = {
         );
 
         return res.json(questions);
+      } else {
+        return res.sendStatus(404);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllQuizzes: async (req, res) => {
+    difficulty = req.query.difficulty
+      ? req.query.difficulty.toUpperCase()
+      : null;
+    id = req.params.id;
+    try {
+      if (id !== undefined && !isNaN(id)) {
+        const quizzes = await categoryService.getAllQuizzes(
+          parseInt(id),
+          difficulty
+        );
+
+        return res.json(quizzes);
+      } else {
+        return res.sendStatus(404);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllQuizzesWithQuestions: async (req, res) => {
+    id = req.params.id;
+    try {
+      if (id !== undefined && !isNaN(id)) {
+        const quizzes = await categoryService.getAllQuizzesWithQuestions(
+          parseInt(id)
+        );
+
+        return res.json(quizzes);
       } else {
         return res.sendStatus(404);
       }

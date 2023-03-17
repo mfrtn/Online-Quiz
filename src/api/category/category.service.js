@@ -67,30 +67,35 @@ const categoryService = {
           },
         },
       },
+      orderBy: {
+        id: "asc",
+      },
     });
   },
 
-  getAllQuestions3: async (id) => {
-    return await db.category.findUnique({
+  getAllQuizzesWithQuestions: async (id, difficulty) => {
+    return await db.quiz.findMany({
       where: {
-        id,
+        categoryId: id,
       },
       include: {
-        questions: true,
+        questions: {
+          select: {
+            question: {},
+          },
+        },
       },
     });
   },
 
-  getAllQuestions2: async (id) => {
-    return await db.question.findMany({
+  getAllQuizzes: async (id, difficulty) => {
+    difficulty = difficulties.includes(difficulty) ? difficulty : false;
+    return await db.quiz.findMany({
       where: {
-        categories: {
-          some: {
-            category: {
-              id,
-            },
-          },
+        difficulty: {
+          in: difficulty ? difficulty : difficulties,
         },
+        categoryId: id,
       },
     });
   },

@@ -1,4 +1,5 @@
 const quizService = require("./quiz.service");
+const { questionService } = require("../question");
 
 const quizController = {
   index: async (req, res) => {
@@ -64,6 +65,21 @@ const quizController = {
         }
       } else {
         return res.sendStatus(400);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllQuestions: async (req, res) => {
+    id = req.params.id;
+    try {
+      if (id !== undefined && !isNaN(id)) {
+        const questions = await quizService.getAllQuestions(parseInt(id));
+
+        return res.json(questions);
+      } else {
+        return res.sendStatus(404);
       }
     } catch (error) {
       throw error;

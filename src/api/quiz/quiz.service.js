@@ -43,6 +43,23 @@ const quizService = {
       },
     });
   },
+
+  getAllQuestions: async (id) => {
+    return await db.question.findMany({
+      where: {
+        quizzes: {
+          some: {
+            quiz: {
+              id,
+            },
+          },
+        },
+      },
+      orderBy: {
+        id: "asc",
+      },
+    });
+  },
 };
 
 module.exports = quizService;
