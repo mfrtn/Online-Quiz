@@ -36,6 +36,26 @@ const userService = {
       },
     });
   },
+
+  hasQuizTakenByUser: async (userId, quizId) => {
+    return await db.userQuiz.findUnique({
+      where: {
+        userId_quizId: {
+          userId,
+          quizId,
+        },
+      },
+    });
+  },
+
+  takeQuiz: async (userId, quizId) => {
+    return await db.userQuiz.create({
+      data: {
+        userId,
+        quizId,
+      },
+    });
+  },
 };
 
 module.exports = userService;

@@ -14,5 +14,6 @@
 - [ ] Compelete Quiz API
 - [ ] Check all Quiz's Questions must be in same category
 - [ ] Check all Quiz's Questions must be in same difficulty as Quiz
-- [ ] Take a Quiz By User API
-- [ ] Answer the Quiz By User API
+- [x] Take a Quiz by User API
+- [ ] Improve Take a Quiz By User API
+- [ ] Answer the Quiz by User API

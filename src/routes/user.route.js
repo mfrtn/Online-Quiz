@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(authJWT);
 router.get("/", admin, userController.index);
 router.get("/:id", self, userController.index);
+router.post("/take/:quizId", userController.takeQuiz);
 
 module.exports = router;
