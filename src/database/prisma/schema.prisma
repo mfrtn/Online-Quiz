@@ -84,7 +84,7 @@ model UserQuiz {
     user      User         @relation(fields: [userId], references: [id])
     quizId    Int
     quiz      Quiz         @relation(fields: [quizId], references: [id])
-    score     Int?
+    score     Float?
     startTime DateTime?
     endTime   DateTime?
     asnwers   UserAnswer[]
@@ -101,7 +101,8 @@ model UserAnswer {
     questionId   Int
     question     Question @relation(fields: [questionId], references: [id])
     answerChosen Int
-    isCorrect    Boolean
+
+    @@unique([userQuizId, questionId])
 }
 
 enum Role {

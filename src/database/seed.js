@@ -13,6 +13,29 @@ for (const key in Difficulty) {
   difficulties.push(Difficulty[key]);
 }
 
+function createStaticUser() {
+  return [
+    {
+      name: "ADMIN",
+      email: "ADMIN@yahoo.com",
+      role: "ADMIN",
+      password: "1234",
+    },
+    {
+      name: "OPERATOR",
+      email: "OPERATOR@yahoo.com",
+      role: "OPERATOR",
+      password: "1234",
+    },
+    {
+      name: "CLIENT",
+      email: "CLIENT@yahoo.com",
+      role: "CLIENT",
+      password: "1234",
+    },
+  ];
+}
+
 function createRandomUser() {
   return {
     name: faker.name.fullName(),
@@ -66,7 +89,10 @@ async function main() {
         });
       })
     );
-    console.log(`${userCount} new rows added to User Table`);
+
+    await prisma.user.createMany({ data: createStaticUser() });
+
+    console.log(`${userCount + 3} new rows added to User Table`);
 
     // Categories
     const categories = await Promise.all(

@@ -37,7 +37,7 @@ const userService = {
     });
   },
 
-  hasQuizTakenByUser: async (userId, quizId) => {
+  userQuiz: async (userId, quizId) => {
     return await db.userQuiz.findUnique({
       where: {
         userId_quizId: {
@@ -55,6 +55,68 @@ const userService = {
         quizId,
       },
     });
+  },
+
+  getAllUserQuizzes: async (id) => {
+    return await db.quiz.findMany({
+      where: {
+        users: {
+          some: {
+            userId: id,
+          },
+        },
+      },
+      include: {
+        users: {
+          select: {
+            score: true,
+            startTime: true,
+            endTime: true,
+          },
+        },
+      },
+    });
+  },
+
+  getAUserQuizWithQuestions: async (quizId) => {
+    return await db.quiz.findUnique({
+      where: {
+        id: quizId,
+      },
+      include: {
+        questions: {
+          select: {
+            question: {
+              select: {
+                id: true,
+                title: true,
+                answer1: true,
+                answer2: true,
+                answer3: true,
+                answer4: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  },
+
+  answerQuiz: async (userAnswers, userQuizId, score) => {
+    return await db.$transaction([
+      db.userAnswer.createMany({
+        data: userAnswers,
+      }),
+
+      db.userQuiz.update({
+        where: {
+          id: userQuizId,
+        },
+        data: {
+          score,
+        },
+      }),
+    ]);
   },
 };
 

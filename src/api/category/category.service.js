@@ -1,9 +1,4 @@
-const { db, Difficulty } = require("../../database");
-
-const difficulties = [];
-for (const key in Difficulty) {
-  difficulties.push(Difficulty[key]);
-}
+const { db, difficulties } = require("../../database");
 
 const categoryService = {
   findMany: async () => {

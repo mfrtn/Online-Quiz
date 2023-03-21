@@ -49,6 +49,7 @@ CREATE TABLE "Quiz" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
+    "categoryId" INTEGER,
     "time" TIMESTAMP(3),
     "difficulty" "Difficulty" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -80,7 +81,7 @@ CREATE TABLE "UserQuiz" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "quizId" INTEGER NOT NULL,
-    "score" INTEGER,
+    "score" DOUBLE PRECISION,
     "startTime" TIMESTAMP(3),
     "endTime" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -95,7 +96,6 @@ CREATE TABLE "UserAnswer" (
     "userQuizId" INTEGER NOT NULL,
     "questionId" INTEGER NOT NULL,
     "answerChosen" INTEGER NOT NULL,
-    "isCorrect" BOOLEAN NOT NULL,
 
     CONSTRAINT "UserAnswer_pkey" PRIMARY KEY ("id")
 );
@@ -111,6 +111,12 @@ CREATE UNIQUE INDEX "QuestionCategory_categoryId_questionId_key" ON "QuestionCat
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserQuiz_userId_quizId_key" ON "UserQuiz"("userId", "quizId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserAnswer_userQuizId_questionId_key" ON "UserAnswer"("userQuizId", "questionId");
+
+-- AddForeignKey
+ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "QuizQuestion" ADD CONSTRAINT "QuizQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
